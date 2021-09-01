@@ -1,0 +1,105 @@
+#!/bin/bash
+
+help()
+{
+  #Display help
+  echo "It is a custom command."
+  echo "Version - v0.1.0"
+  echo
+  echo "Syntax: internsctl"
+  echo "        internsctl cpu getinfo"
+  echo "        internsctl memory getinfo"
+  echo "        internsctl user create<username>"
+  echo "        internsctl user list"
+  echo "        internsctl user list --sudo-only"
+  echo "        internsctl file [option] getinfo <file-name>"
+  echo "Options:"
+  echo "-s     to print size"
+  echo "-p     to print file permissions"
+  echo "o      to print file owner"
+  echo "m      last-modified"
+  echo
+}
+
+internsctl()
+{
+   ls;
+}
+internsctl
+if [ "$1" == "--help" ]
+then
+    help
+fi
+
+
+if [ "$1" == "cpu getinfo" ]
+then
+    lscpu
+fi
+
+if [ "$1" == "memory getinfo" ]
+then
+    free
+fi
+
+if [ "$1" == "user create" ]
+then
+    read Name
+    sudo useradd $Name
+fi
+
+if [ "$1" == "user list" ]
+then
+    cat /etc/passwd
+fi
+
+if [ "$1" == "user list --sudo-only" ]
+then
+   sudo cat /etc/passwd
+fi
+
+if [ "$1" == "file getinfo" ]
+then
+    ls -la
+fi
+
+if [ "$1" == "file getinfo -" ]
+then
+    if [ "$2" == "s" ]
+    then
+	read fname
+        if ["$fname" == "*" ]
+	then
+	    ls -lh
+	else
+	    ls -lh $fname
+	fi
+    elif [ "$2" == "p" ]
+    then
+        read fname
+        if ["$fname" == "*" ]
+        then
+            ls -l
+        else
+            ls -l $fname
+        fi
+    elif [ "$2" == "o" ]
+    then
+        read fname
+        if ["$fname" == "*" ]
+        then
+            ls -l
+        else
+            ls -l $fname
+        fi
+    elif [ "$2" == "m" ]
+    then
+	read fname
+        if ["$fname" == "*" ]
+	then
+	    stat in *
+	else
+	    stat $fname
+	fi
+    fi
+fi
